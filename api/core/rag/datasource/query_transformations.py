@@ -11,13 +11,13 @@ from core.model_runtime.errors.invoke import InvokeError
 
 class QueryTransformationService:
     @classmethod
-    def hyde(cls, query):
-        if not current_user.is_admin_or_owner:
-            raise Forbidden()
+    def hyde(cls, tenant_id, query):
+        if not tenant_id:
+            return query
         
         model_manager = ModelManager()
         model_instance = model_manager.get_default_model_instance(
-            tenant_id=current_user.current_tenant_id,
+            tenant_id=tenant_id,
             model_type=ModelType.LLM,
         )
         

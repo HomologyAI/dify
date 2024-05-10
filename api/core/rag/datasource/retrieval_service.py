@@ -82,7 +82,7 @@ class RetrievalService:
         # add hyde
         if retrival_method == 'hybrid_search' and is_hyde:
             """using hyde only in hybrid search"""
-            query4hyde  = QueryTransformationService.hyde(query)
+            query4hyde  = QueryTransformationService.hyde(dataset.tenant_id, query)
             if query4hyde:
                 keyword_thread = threading.Thread(target=RetrievalService.keyword_search, kwargs={
                     'flask_app': current_app._get_current_object(),
