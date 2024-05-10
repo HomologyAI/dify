@@ -1,8 +1,5 @@
 import logging
 
-from flask_login import current_user
-from werkzeug.exceptions import Forbidden
-
 from core.model_manager import ModelManager
 from core.model_runtime.entities.message_entities import UserPromptMessage
 from core.model_runtime.entities.model_entities import ModelType
