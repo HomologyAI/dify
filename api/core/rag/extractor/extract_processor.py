@@ -1,7 +1,10 @@
+import logging
+import sys
 import tempfile
 from pathlib import Path
 from typing import Union
 
+import aspose.words as aw
 import requests
 from flask import current_app
 
@@ -24,12 +27,15 @@ from core.rag.extractor.unstructured.unstructured_text_extractor import Unstruct
 from core.rag.extractor.unstructured.unstructured_xml_extractor import UnstructuredXmlExtractor
 from core.rag.extractor.word_extractor import WordExtractor
 from core.rag.models.document import Document
+from core.tools.utils.check_platform import PlatformUtil
 from extensions.ext_storage import storage
 from models.model import UploadFile
 
 SUPPORT_URL_CONTENT_TYPES = ['application/pdf', 'text/plain']
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 
+logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
+logger = logging.getLogger(__name__)
 
 class ExtractProcessor:
     @classmethod
@@ -94,6 +100,15 @@ class ExtractProcessor:
                         extractor = HtmlExtractor(file_path)
                     elif file_extension in ['.docx']:
                         extractor = UnstructuredWordExtractor(file_path, unstructured_api_url)
+                    elif file_extension == '.doc':
+                        # Only compatible with macOS and Linux
+                        if PlatformUtil.is_mac():
+                            new_pdf = aw.Document(file_path)
+                            new_file_path = file_path[:-3] + 'pdf'
+                            new_pdf.save(new_file_path)
+                            extractor = PdfExtractor(new_file_path)
+                        elif PlatformUtil.is_linux():
+                            extractor = UnstructuredWordExtractor(file_path, unstructured_api_url)
                     elif file_extension == '.csv':
                         extractor = CSVExtractor(file_path, autodetect_encoding=True)
                     elif file_extension == '.msg':
@@ -121,6 +136,15 @@ class ExtractProcessor:
                         extractor = HtmlExtractor(file_path)
                     elif file_extension in ['.docx']:
                         extractor = WordExtractor(file_path)
+                    elif file_extension == '.doc':
+                        # Only compatible with macOS and Linux
+                        if PlatformUtil.is_mac():
+                            new_pdf = aw.Document(file_path)
+                            new_file_path = file_path[:-3] + 'pdf'
+                            new_pdf.save(new_file_path)
+                            extractor = PdfExtractor(new_file_path)
+                        elif PlatformUtil.is_linux():
+                            extractor = UnstructuredWordExtractor(file_path, unstructured_api_url)
                     elif file_extension == '.csv':
                         extractor = CSVExtractor(file_path, autodetect_encoding=True)
                     else:
