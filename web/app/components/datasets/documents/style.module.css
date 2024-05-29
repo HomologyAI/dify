@@ -93,6 +93,13 @@
 .docxIcon {
   background-image: url(~@/assets/docx.svg);
 }
+
+.pngIcon,
+.jpgIcon,
+.jpegIcon {
+  background-image: url(~@/assets/image.svg);
+}
+
 .statusItemDetail {
   @apply h-8 font-medium border border-gray-200 inline-flex items-center rounded-lg pl-3 pr-4 mr-2;
 }

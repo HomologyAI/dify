@@ -20,6 +20,7 @@ from core.rag.extractor.pdf_extractor import PdfExtractor
 from core.rag.extractor.text_extractor import TextExtractor
 from core.rag.extractor.unstructured.unstructured_doc_extractor import UnstructuredWordExtractor
 from core.rag.extractor.unstructured.unstructured_eml_extractor import UnstructuredEmailExtractor
+from core.rag.extractor.unstructured.unstructured_image_extractor import UnstructuredImageExtractor
 from core.rag.extractor.unstructured.unstructured_markdown_extractor import UnstructuredMarkdownExtractor
 from core.rag.extractor.unstructured.unstructured_msg_extractor import UnstructuredMsgExtractor
 from core.rag.extractor.unstructured.unstructured_ppt_extractor import UnstructuredPPTExtractor
@@ -125,6 +126,8 @@ class ExtractProcessor:
                         extractor = UnstructuredPPTXExtractor(file_path, unstructured_api_url)
                     elif file_extension == '.xml':
                         extractor = UnstructuredXmlExtractor(file_path, unstructured_api_url)
+                    elif file_extension in ['.png', '.jpg', '.jpeg']:
+                        extractor = UnstructuredImageExtractor(file_path)
                     else:
                         # txt
                         extractor = UnstructuredTextExtractor(file_path, unstructured_api_url) if is_automatic \
@@ -154,6 +157,8 @@ class ExtractProcessor:
                             extractor = UnstructuredWordExtractor(file_path, unstructured_api_url)
                     elif file_extension == '.csv':
                         extractor = CSVExtractor(file_path, autodetect_encoding=True)
+                    elif file_extension in ['.png', '.jpg', '.jpeg']:
+                        extractor = UnstructuredImageExtractor(file_path)
                     else:
                         # txt
                         extractor = TextExtractor(file_path, autodetect_encoding=True)
