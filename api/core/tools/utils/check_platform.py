@@ -2,7 +2,7 @@ import platform
 import re
 import subprocess
 
-import PyPDF2
+import pypdfium2
 
 
 class PlatformUtil:
@@ -29,8 +29,8 @@ class PlatformUtil:
     def is_text_based_pdf(pdf_path: str) -> bool:
         try:
             with open(pdf_path, 'rb') as file:
-                reader = PyPDF2.PdfReader(file)
-                if reader.pages[0].extract_text():
+                reader = pypdfium2.PdfDocument(pdf_path, autoclose=True)
+                if reader[0].get_textpage().get_text_range():
                     return True
                 else:
                     return False
