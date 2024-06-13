@@ -1,5 +1,6 @@
 """Abstract interface for document loader implementations."""
 import base64
+import logging
 from typing import Optional
 
 import fitz
@@ -10,6 +11,10 @@ from core.rag.extractor.extractor_base import BaseExtractor
 from core.rag.models.document import Document
 from extensions.ext_storage import storage
 
+logging.basicConfig(
+    format="%(asctime)s %(pathname)s line:%(lineno)d [%(levelname)s] %(message)s",
+    level="INFO",
+)
 
 class OCRPdfExtractor(BaseExtractor):
     """Load pdf files.

@@ -55,16 +55,22 @@ class HitTestingService:
 
         embeddings = CacheEmbedding(embedding_model)
 
-        all_documents = RetrievalService.retrieve(retrival_method=retrieval_model['search_method'],
-                                                  dataset_id=dataset.id,
-                                                  query=query,
-                                                  top_k=retrieval_model['top_k'],
-                                                  score_threshold=retrieval_model['score_threshold']
-                                                  if retrieval_model['score_threshold_enabled'] else None,
-                                                  reranking_model=retrieval_model['reranking_model']
-                                                  if retrieval_model['reranking_enable'] else None,
-                                                  is_hyde = True,
-                                                  )
+        all_documents = RetrievalService.retrieve(
+            retrival_method=retrieval_model["search_method"],
+            dataset_id=dataset.id,
+            query=query,
+            top_k=retrieval_model["top_k"],
+            score_threshold=(
+                retrieval_model["score_threshold"]
+                if retrieval_model["score_threshold_enabled"]
+                else None
+            ),
+            reranking_model=(
+                retrieval_model["reranking_model"]
+                if retrieval_model["reranking_enable"]
+                else None
+            ),
+        )
 
         end = time.perf_counter()
         logging.debug(f"Hit testing retrieve in {end - start:0.4f} seconds")
