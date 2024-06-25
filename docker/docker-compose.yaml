@@ -2,7 +2,7 @@ version: '3'
 services:
   # API service
   api:
-    image: dify_local:v2.3
+    image: dify_local:v3.2
     restart: always
     environment:
       # Startup mode, 'api' starts the API server.
@@ -110,6 +110,7 @@ services:
       MILVUS_PASSWORD: Milvus
       # The milvus tls switch.
       MILVUS_SECURE: 'false'
+
       # Mail configuration, support: resend, smtp
       MAIL_TYPE: ''
       # default send from email address, if not specified
@@ -151,7 +152,7 @@ services:
   # worker service
   # The Celery worker for processing the queue.
   worker:
-    image: dify_local:v2.3
+    image: dify_local:v3.2
     restart: always
     environment:
       # Startup mode, 'worker' starts the Celery worker for processing the queue.

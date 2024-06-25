@@ -20,7 +20,8 @@ app_fields = {
     'icon': fields.String,
     'icon_background': fields.String,
     'token': fields.String,
-    'datasets': fields.List(fields.List(fields.String))
+    'datasets': fields.List(fields.List(fields.String)),
+    'opening_statement': fields.String,
 }
 
 
@@ -113,7 +114,8 @@ class AppListApi(Resource):
 
         # get app list, not left join now, all returned apps should contain api_token
         apps = (db.session.query(App.id, App.name, App.mode, App.icon, App.icon_background, ApiToken.token,
-                                AppModelConfig.dataset_configs, AppModelConfig.user_input_form).
+                                 AppModelConfig.dataset_configs, AppModelConfig.user_input_form,
+                                 AppModelConfig.opening_statement).
                 filter(App.is_universal == False).join(ApiToken, App.id == ApiToken.app_id).
                 join(AppModelConfig, AppModelConfig.id == App.app_model_config_id).all())
         res = []
@@ -134,7 +136,8 @@ class AppListApi(Resource):
                 'icon': app.icon,
                 'icon_background': app.icon_background,
                 'token': app.token,
-                'datasets': datasets
+                'datasets': datasets,
+                'opening_statement': app.opening_statement
             })
 
         return res
