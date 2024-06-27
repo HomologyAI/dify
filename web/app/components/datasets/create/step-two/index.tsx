@@ -498,8 +498,8 @@ const StepTwo = ({
   }, [segmentationType, indexType])
 
   const [retrievalConfig, setRetrievalConfig] = useState(currentDataset?.retrieval_model_dict || {
-    search_method: RETRIEVE_METHOD.semantic,
-    reranking_enable: false,
+    search_method: RETRIEVE_METHOD.hybrid,
+    reranking_enable: true,
     reranking_model: {
       reranking_provider_name: rerankDefaultModel?.provider.provider,
       reranking_model_name: rerankDefaultModel?.model,

@@ -20,9 +20,25 @@ from services.errors.file import FileTooLargeError, UnsupportedFileTypeError
 IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg']
 IMAGE_EXTENSIONS.extend([ext.upper() for ext in IMAGE_EXTENSIONS])
 
-ALLOWED_EXTENSIONS = ['txt', 'markdown', 'md', 'pdf', 'html', 'htm', 'xlsx', 'docx', 'csv']
+ALLOWED_EXTENSIONS = [
+    "txt",
+    "markdown",
+    "md",
+    "pdf",
+    "html",
+    "htm",
+    "xlsx",
+    "docx",
+    "csv",
+    "doc",
+    "png",
+    "jpg",
+    "jpeg",
+    "pptx",
+    "ppt",
+]
 UNSTRUSTURED_ALLOWED_EXTENSIONS = ['txt', 'markdown', 'md', 'pdf', 'html', 'htm', 'xlsx',
-                                   'docx', 'csv', 'eml', 'msg', 'pptx', 'ppt', 'xml']
+                                   'docx', 'csv', 'eml', 'msg', 'pptx', 'ppt', 'xml', 'doc','png', 'jpg', 'jpeg']
 PREVIEW_WORDS_LIMIT = 3000
 
 
