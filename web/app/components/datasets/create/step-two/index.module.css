@@ -282,7 +282,8 @@
   background-image: url(../assets/pdf.svg);
   background-size: 24px;
 }
-
+.fileIcon.ppt,
+.fileIcon.pptx,
 .fileIcon.pdf {
   background-image: url(../assets/pdf.svg);
 }

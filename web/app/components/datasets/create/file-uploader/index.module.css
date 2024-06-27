@@ -130,7 +130,8 @@
 .fileIcon.jpeg {
   background-image: url(../assets/image.svg);
 }
-
+.fileIcon.ppt,
+.fileIcon.pptx,
 .fileIcon.pdf {
   background-image: url(../assets/pdf.svg);
 }

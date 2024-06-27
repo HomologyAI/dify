@@ -51,6 +51,7 @@ const FileUploader = ({
   const supportTypesShowNames = (() => {
     const extensionMap: { [key: string]: string } = {
       md: 'markdown',
+      ppt: 'ppt',
       pptx: 'pptx',
       htm: 'html',
       xlsx: 'xlsx',

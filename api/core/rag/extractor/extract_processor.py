@@ -4,6 +4,7 @@ import tempfile
 from pathlib import Path
 from typing import Union
 
+import aspose.slides as asl
 import aspose.words as aw
 import requests
 from flask import current_app
@@ -159,6 +160,32 @@ class ExtractProcessor:
                         extractor = CSVExtractor(file_path, autodetect_encoding=True)
                     elif file_extension in ['.png', '.jpg', '.jpeg']:
                         extractor = UnstructuredImageExtractor(file_path)
+                    elif file_extension == ".ppt":
+                        if PlatformUtil.is_mac():
+                            with asl.Presentation(file_path) as presentation:
+                                # 保存为PDF格式
+                                new_file_path = file_path[:-3] + "pdf"
+                                presentation.save(
+                                    new_file_path, asl.export.SaveFormat.PDF
+                                )
+                            extractor = PdfExtractor(new_file_path)
+                        elif PlatformUtil.is_linux():
+                            extractor = UnstructuredPPTExtractor(
+                                file_path, unstructured_api_url
+                            )
+                    elif file_extension == ".pptx":
+                        if PlatformUtil.is_mac():
+                            with asl.Presentation(file_path) as presentation:
+                                # 保存为PDF格式
+                                new_file_path = file_path[:-3] + "pdf"
+                                presentation.save(
+                                    new_file_path, asl.export.SaveFormat.PDF
+                                )
+                            extractor = PdfExtractor(new_file_path)
+                        elif PlatformUtil.is_linux():
+                            extractor = UnstructuredPPTXExtractor(
+                                file_path, unstructured_api_url
+                            )
                     else:
                         # txt
                         extractor = TextExtractor(file_path, autodetect_encoding=True)
