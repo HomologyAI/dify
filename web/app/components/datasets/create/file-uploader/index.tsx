@@ -51,10 +51,15 @@ const FileUploader = ({
   const supportTypesShowNames = (() => {
     const extensionMap: { [key: string]: string } = {
       md: 'markdown',
+      ppt: 'ppt',
       pptx: 'pptx',
       htm: 'html',
       xlsx: 'xlsx',
       docx: 'docx',
+      doc: 'doc',
+      png: 'png',
+      jpg: 'jpg',
+      jpeg: 'jpeg',
     }
 
     return [...supportTypes]

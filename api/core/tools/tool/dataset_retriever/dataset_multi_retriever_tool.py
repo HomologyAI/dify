@@ -10,6 +10,7 @@ from core.callback_handler.index_tool_callback_handler import DatasetIndexToolCa
 from core.model_manager import ModelManager
 from core.model_runtime.entities.model_entities import ModelType
 from core.rag.datasource.retrieval_service import RetrievalService
+from core.rag.retrieval.query_transformations import QueryTransformation
 from core.rerank.rerank import RerankRunner
 from extensions.ext_database import db
 from models.dataset import Dataset, Document, DocumentSegment
@@ -60,14 +61,18 @@ class DatasetMultiRetrieverTool(BaseTool):
         threads = []
         all_documents = []
         logger.info(f"datasets: {len(self.dataset_ids)}, {self.dataset_ids}")
+        query_transformation = QueryTransformation(query, self.tenant_id)
         for dataset_id in self.dataset_ids:
-            retrieval_thread = threading.Thread(target=self._retriever, kwargs={
-                'flask_app': current_app._get_current_object(),
-                'dataset_id': dataset_id,
-                'query': query,
-                'all_documents': all_documents,
-                'hit_callbacks': self.hit_callbacks
-            })
+            retrieval_thread = threading.Thread(
+                target=self._retriever,
+                kwargs={
+                    "flask_app": current_app._get_current_object(),
+                    "dataset_id": dataset_id,
+                    "query": query_transformation,
+                    "all_documents": all_documents,
+                    "hit_callbacks": self.hit_callbacks,
+                },
+            )
             threads.append(retrieval_thread)
             retrieval_thread.start()
         for thread in threads:
@@ -160,8 +165,14 @@ class DatasetMultiRetrieverTool(BaseTool):
     async def _arun(self, tool_input: str) -> str:
         raise NotImplementedError()
 
-    def _retriever(self, flask_app: Flask, dataset_id: str, query: str, all_documents: list,
-                   hit_callbacks: list[DatasetIndexToolCallbackHandler]):
+    def _retriever(
+        self,
+        flask_app: Flask,
+        dataset_id: str,
+        query: QueryTransformation,
+        all_documents: list,
+        hit_callbacks: list[DatasetIndexToolCallbackHandler],
+    ):
         with flask_app.app_context():
             dataset = db.session.query(Dataset).filter(
                 Dataset.tenant_id == self.tenant_id,
@@ -172,7 +183,7 @@ class DatasetMultiRetrieverTool(BaseTool):
                 return []
 
             for hit_callback in hit_callbacks:
-                hit_callback.on_query(query, dataset.id)
+                hit_callback.on_query(query.origin_query, dataset.id)
 
             # get retrieval model , if the model is not setting , using default
             retrieval_model = dataset.retrieval_model if dataset.retrieval_model else default_retrieval_model

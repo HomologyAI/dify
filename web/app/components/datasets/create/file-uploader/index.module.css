@@ -125,6 +125,13 @@
   background-image: url(../assets/xlsx.svg);
 }
 
+.fileIcon.png,
+.fileIcon.jpg,
+.fileIcon.jpeg {
+  background-image: url(../assets/image.svg);
+}
+.fileIcon.ppt,
+.fileIcon.pptx,
 .fileIcon.pdf {
   background-image: url(../assets/pdf.svg);
 }
